@@ -443,6 +443,111 @@ START_TEST(test_ck_assert_uint_expr)
   ck_assert_uint_eq(x, y);
 } END_TEST
 
+START_TEST(test_ck_assert_floating_finite)
+{
+  double x = 0.0001;
+  ck_assert_floating_finite(x);
+  // MS VC doesn't allow explicit division by zero
+  double t = 1;
+  x = 1.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_finite(x);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_finite_with_nan)
+{
+  double x = -0.0001;
+  ck_assert_floating_finite(x);
+  double t = 1;
+  x = 0.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_finite(x);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_finite_with_mod)
+{
+  int d = 2;
+  double t = 1;
+  double x = 0.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_finite(x*(2%d));
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_infinite)
+{
+  double t = 1;
+  double x = 1.0 / (1.0 - t);
+  ck_assert_floating_infinite(x);
+  x = -1.0 / (1.0 - t);
+  ck_assert_floating_infinite(x);
+  x = 0;
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_infinite(x);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_infinite_with_nan)
+{
+  double t = 1;
+  double x = 0.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_infinite(x);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_infinite_with_mod)
+{
+  double t = 1;
+  int d = 2;
+  double x = 0.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_infinite(x*(2%d));
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_nan)
+{
+  double t = 1;
+  double x = 0.0 / (1.0 - t);
+  ck_assert_floating_nan(x);
+  x = 1.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_nan(x);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_nan_with_mod)
+{
+  int d = 2;
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_nan(2%d);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_nonnan)
+{
+  double t = 1;
+  double x = 0.1;
+  ck_assert_floating_nonnan(x);
+  x = 0.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_nonnan(x);
+}
+END_TEST
+
+START_TEST(test_ck_assert_floating_nonnan_with_mod)
+{
+  double t = 1;
+  int d = 2;
+  double x = 0.0 / (1.0 - t);
+  record_failure_line_num(__LINE__);
+  ck_assert_floating_nonnan(x*(2%d));
+}
+END_TEST
+
 int returnsZero(const char* argument);
 int returnsZero(const char* argument)
 {
@@ -1173,6 +1278,16 @@ Suite *make_sub_suite(void)
   tcase_add_test (tc_simple, test_ck_assert_uint_ge);
   tcase_add_test (tc_simple, test_ck_assert_uint_ge_with_mod);
   tcase_add_test (tc_simple, test_ck_assert_uint_expr);
+  tcase_add_test (tc_simple, test_ck_assert_floating_finite);
+  tcase_add_test (tc_simple, test_ck_assert_floating_finite_with_nan);
+  tcase_add_test (tc_simple, test_ck_assert_floating_finite_with_mod);
+  tcase_add_test (tc_simple, test_ck_assert_floating_infinite);
+  tcase_add_test (tc_simple, test_ck_assert_floating_infinite_with_nan);
+  tcase_add_test (tc_simple, test_ck_assert_floating_infinite_with_mod);
+  tcase_add_test (tc_simple, test_ck_assert_floating_nan);
+  tcase_add_test (tc_simple, test_ck_assert_floating_nan_with_mod);
+  tcase_add_test (tc_simple, test_ck_assert_floating_nonnan);
+  tcase_add_test (tc_simple, test_ck_assert_floating_nonnan_with_mod);
   tcase_add_test (tc_simple, test_percent_n_escaped);
   tcase_add_test (tc_simple, test_ck_assert_str_eq);
   tcase_add_test (tc_simple, test_ck_assert_str_ne);

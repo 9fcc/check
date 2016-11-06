@@ -36,6 +36,16 @@ TestResult **tr_all_array;
 FILE * line_num_failures = NULL;
 char * line_num_failures_file_name = NULL;
 
+#ifdef __GNUC__
+# ifdef __clang__
+#   define NAN_STR "nan"
+# else
+#   define NAN_STR "-nan"
+# endif
+#else
+# define NAN_STR "nan"
+#endif
+
 #define MAXSTR 300
 
 typedef struct {
@@ -104,6 +114,32 @@ static master_test_t master_tests[] = {
   { "Simple Tests", CK_FAILURE, "Assertion 'x >= y' failed: x == 2, y == 3" },
   { "Simple Tests", CK_FAILURE, "Assertion '1%d >= 3%f' failed: 1%d == 0, 3%f == 1" },
   { "Simple Tests", CK_PASS,    "Passed" },
+  /* Tests on floating macros */
+  { "Simple Tests", CK_FAILURE, "Assertion 'x == y' failed: x == 1.100000, y == 1.200000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '3%d == 2%f' failed: 3%d == 1.000000, 2%f == 0.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x != y' failed: x == 1.100000, y == 1.100000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '1%d != 1%f' failed: 1%d == 1.000000, 1%f == 1.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x < y' failed: x == 2.000000, y == 1.500000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '3%d < 2%f' failed: 3%d == 1.000000, 2%f == 0.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x <= y' failed: x == 2.000000, y == 1.500000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '3%d <= 2%f' failed: 3%d == 1.000000, 2%f == 0.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x > y' failed: x == 2.500000, y == 3.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '2%d > 3%f' failed: 2%d == 0.000000, 3%f == 1.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x >= y' failed: x == 2.500000, y == 3.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '2%d >= 3%f' failed: 2%d == 0.000000, 3%f == 1.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion '|y - x| < 10^-3' failed: x == 0.001000, y == 0.002000, 3 == 3" },
+  { "Simple Tests", CK_FAILURE, "Assertion '|2%f - 3%d| < 10^-1' failed: 3%d == 1.000000, 2%f == 0.000000, 1 == 1" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x is finite' failed: x == inf" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x is finite' failed: x == " NAN_STR },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x*(2%d) is finite' failed: x*(2%d) == " NAN_STR },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x is infinite' failed: x == 0.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x is infinite' failed: x == " NAN_STR },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x*(2%d) is infinite' failed: x*(2%d) == " NAN_STR },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x is NaN' failed: x == inf" },
+  { "Simple Tests", CK_FAILURE, "Assertion '2%d is NaN' failed: 2%d == 0.000000" },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x is not NaN' failed: x == " NAN_STR },
+  { "Simple Tests", CK_FAILURE, "Assertion 'x*(2%d) is not NaN' failed: x*(2%d) == " NAN_STR },
+  /* End of tests on floating macros */
   { "Simple Tests", CK_FAILURE, "Assertion 'returnsZero(\"%n\") == 1' failed: returnsZero(\"%n\") == 0, 1 == 1" },
   { "Simple Tests", CK_FAILURE, "Assertion '\"test1\" == s' failed: \"test1\" == \"test1\", s == \"test2\"" },
   { "Simple Tests", CK_FAILURE, "Assertion 't != s' failed: t == \"test2\", s == \"test2\"" },
