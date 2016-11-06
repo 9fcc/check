@@ -1022,6 +1022,32 @@ by the last two letters of the function name.  The abbreviations @code{eq},
 @code{==}, @code{!=}, @code{<}, @code{<=}, @code{>}, and @code{>=}
 respectively.
 
+@item ck_assert_floating_finite
+
+Checks floating point number (@code{float}, @code{double}, @code{long double})
+to be a finite value and displays predefined message with condition and value
+of the input parameter on failure. Finite means that value cannot be
+positive infinity, negative infinity or NaN (not a number).
+
+@item ck_assert_floating_infinite
+
+Checks floating point number (@code{float}, @code{double}, @code{long double})
+to be infinite value and displays predefined message with condition and value
+of the input parameter on failure. Infinite means that value may only be
+positive infinity or negative infinity.
+
+@item ck_assert_floating_nan
+
+Checks floating point number (@code{float}, @code{double}, @code{long double})
+to be NaN (not a number) value and displays predefined message with condition
+and value of the input parameter on failure.
+
+@item ck_assert_floating_nonnan
+
+Checks floating point number (@code{float}, @code{double}, @code{long double})
+not to be NaN (not a number) value and displays predefined message with
+condition and value of the input parameter on failure.
+
 @item ck_assert_uint_eq
 @itemx ck_assert_uint_ne
 @itemx ck_assert_uint_lt
