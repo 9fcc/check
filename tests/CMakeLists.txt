@@ -63,6 +63,11 @@ add_executable(check_check ${CHECK_CHECK_HEADERS} ${CHECK_CHECK_SOURCES})
 set(CHECK_CHECK_LIBRARIES
   check
   compat)
+if(ENABLE_PCREPOSIX)
+  list(APPEND
+    CHECK_CHECK_LIBRARIES
+    pcreposix)
+endif()
 
 target_link_libraries(check_check ${CHECK_CHECK_LIBRARIES})
 

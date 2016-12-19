@@ -23,12 +23,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#if ENABLE_REGEX
-# include <regex.h>
-#endif
 #include <check.h>
 #include <assert.h>
 #include "check_check.h"
+#if ENABLE_REGEX
+# if ENABLE_PCREPOSIX
+#   include <pcreposix.h>
+# else
+#   include <regex.h>
+# endif
+#endif
 
 int sub_nfailed;
 int sub_ntests;
