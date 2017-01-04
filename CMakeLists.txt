@@ -319,6 +319,11 @@ else(HAVE_SUBUNIT)
 endif (HAVE_SUBUNIT)
 
 if (NOT ENABLE_REGEX AND WITH_PCREPOSIX)
+    find_package(PCREPOSIX)
+    if (PCREPOSIX_FOUND)
+        include_directories(${PCREPOSIX_INCLUDE_DIRS})
+        link_directories(${PCREPOSIX_LIBRARY_DIRS})
+    endif()
     # pcreposix functions are just wrappers for pcre functions
     check_library_exists(pcreposix regcomp "" HAVE_LIBPCREPOSIX)
     if (HAVE_LIBPCREPOSIX)
